@@ -42,6 +42,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    soundeffect.play()
     if (status == IN_GAME) {
         if (!(index == 0)) {
             index += 0 - 1
@@ -55,6 +56,7 @@ function reset__lvl_3_2 () {
     console.log("Game data cleared!")
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    soundeffect.play()
     if (status == IN_GAME) {
         if (!(index == contenuto_frase__lvl_3_2.length - 1)) {
             index += 1
@@ -182,7 +184,7 @@ function frasi__lvl_3_2 (frase: number) {
                 "sacco a pelo",
                 "blu."
             ],
-            corretto_frase__lvl_3_2 = 4
+                corretto_frase__lvl_3_2 = 4
             break
         case 11:
             contenuto_frase__lvl_3_2 = [
@@ -191,7 +193,7 @@ function frasi__lvl_3_2 (frase: number) {
                 "mi hanno preso in giro",
                 "tutta la mattina!"
             ],
-            corretto_frase__lvl_3_2 = 2
+                corretto_frase__lvl_3_2 = 2
             break
         case 12:
             contenuto_frase__lvl_3_2 = [
@@ -202,7 +204,7 @@ function frasi__lvl_3_2 (frase: number) {
                 "un'importante",
                 "borsa di studio."
             ],
-            corretto_frase__lvl_3_2 = 5
+                corretto_frase__lvl_3_2 = 5
             break
         case 13:
             contenuto_frase__lvl_3_2 = [
@@ -257,7 +259,7 @@ function frasi__lvl_3_2 (frase: number) {
                 "la caccia al tesoro",
                 "finale."
             ]
-            corretto_frase__lvl_3_2 = 0
+            corretto_frase__lvl_3_2 = 4
             break
         case 18:
             contenuto_frase__lvl_3_2 = [
@@ -381,12 +383,13 @@ let saving: TextSprite = null
 let instructions: TextSprite = null
 let game_title: TextSprite = null
 let status = 0
+let soundeffect: SoundBuffer = null
 let IN_GAME = 0
 let IN_MENU = 0
 let gameplay_background: Image = null
 let main_menu_background: Image = null
-let corretto_frase__lvl_3_2 = 0
 let contenuto_frase__lvl_3_2: string[] = []
+let corretto_frase__lvl_3_2 = 0
 main_menu_background = img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999991119999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -603,6 +606,7 @@ gameplay_background = img`
     `
 IN_MENU = 0
 IN_GAME = 1
+soundeffect = soundEffects.createSound(soundEffects.waveNumber(WaveType.Sine), 200, 440, 440)
 inizio__lvl_3_2()
 forever(function () {
     if (status == IN_GAME) {

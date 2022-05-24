@@ -4,7 +4,8 @@
     "dependencies": {
         "device": "*",
         "settings-blocks": "github:microsoft/pxt-settings-blocks#v1.0.0",
-        "arcade-text": "github:microsoft/arcade-text#v1.3.0"
+        "arcade-text": "github:microsoft/arcade-text#v1.3.0",
+        "sound-effects": "github:klausw3/pxt-sound-effects#v1.1.0"
     },
     "files": [
         "main.blocks",
