@@ -26,13 +26,12 @@ function inizio__lvl_3_2 () {
     game_title = textsprite.create("Polirematiche", 1, 15)
     game_title.setPosition(80, 50)
     if (blockSettings.readNumber("first_time") == 1) {
-        instructions = textsprite.create("Premi A per iniziare", 1, 15)
-        instructions.setPosition(80, 60)
+        instructions = textsprite.create("A: Inizia", 1, 15)
     } else {
-        instructions = textsprite.create("Premi A per riprendere", 1, 15)
-        instructions.setPosition(80, 60)
+        instructions = textsprite.create("A: Continua", 1, 15)
     }
-    saving = textsprite.create("Premi B per reimpostare", 1, 15)
+    instructions.setPosition(80, 60)
+    saving = textsprite.create("B: Reset", 1, 15)
     saving.setPosition(80, 70)
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
