@@ -59,7 +59,7 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
         if (!(index == 0)) {
             index += 0 - 1
             parte_selez__lvl_3_2.setText(contenuto_frase__lvl_3_2[index])
-            parte_selez__lvl_3_2.setPosition(80, 70)
+            parte_selez__lvl_3_2.setPosition(80, 75)
         }
     }
 })
@@ -73,7 +73,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         if (!(index == contenuto_frase__lvl_3_2.length - 1)) {
             index += 1
             parte_selez__lvl_3_2.setText(contenuto_frase__lvl_3_2[index])
-            parte_selez__lvl_3_2.setPosition(80, 70)
+            parte_selez__lvl_3_2.setPosition(80, 75)
         }
     }
 })
@@ -93,10 +93,11 @@ function gioco__lvl_3_2 () {
     instructions.destroy()
     saving.destroy()
     completa__lvl_3_2 = sprites.create(img`
-        b 
+        e 
         `, SpriteKind.Text)
+    completa__lvl_3_2.setPosition(80, 70)
     parte_selez__lvl_3_2 = textsprite.create("", 0, 1)
-    parte_selez__lvl_3_2.setPosition(80, 70)
+    parte_selez__lvl_3_2.setPosition(80, 75)
     frasi__lvl_3_2(frase__lvl_3_2)
 }
 function frasi__lvl_3_2 (frase: number) {
@@ -384,7 +385,7 @@ function frasi__lvl_3_2 (frase: number) {
             game.over(true)
     }
 parte_selez__lvl_3_2.setText(contenuto_frase__lvl_3_2[index])
-    parte_selez__lvl_3_2.setPosition(80, 70)
+    parte_selez__lvl_3_2.setPosition(80, 75)
 }
 let background_index = 0
 let completa__lvl_3_2: Sprite = null
@@ -400,7 +401,7 @@ let IN_GAME = 0
 let IN_MENU = 0
 let main_menu_background: Image = null
 let corretto_frase__lvl_3_2 = 0
-let contenuto_frase__lvl_3_2: string[] = []
+let contenuto_frase__lvl_3_2: string[]
 main_menu_background = img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999991119999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
