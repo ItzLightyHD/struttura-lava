@@ -1,12 +1,13 @@
 {
-    "name": "polirematiche",
+    "name": "Struttura con selezione (by me)",
     "version": "1.0.0",
     "description": "",
     "dependencies": {
         "device": "*",
         "settings-blocks": "github:microsoft/pxt-settings-blocks#v1.0.0",
         "arcade-text": "github:microsoft/arcade-text#v1.3.0",
-        "sound effects": "github:klausw3/pxt-sound-effects#v1.1.0"
+        "sound effects": "github:klausw3/pxt-sound-effects#v1.1.0",
+        "pxt-arcade-image-transform": "github:robo-technical-group/pxt-arcade-image-transform#v1.0.8"
     },
     "files": [
         "main.blocks",

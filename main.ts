@@ -1,8 +1,27 @@
+function losing__lvl_ () {
+    pause(300)
+    LOSING = 0
+    parte_selez__lvl_.setVelocity(0, 0)
+    transformSprites.rotateSprite(parte_selez__lvl_, 0)
+    if (errori__lvl_ != 4) {
+        music.smallCrash.play()
+        errori__lvl_ += 1
+        console.log("Skipped level " + blockSettings.readNumber("frase__lvl_") + "!")
+        blockSettings.writeNumber("frase__lvl_", blockSettings.readNumber("frase__lvl_") + 1)
+        frasi__lvl_()
+    } else {
+        music.wawawawaa.play()
+        errori__lvl_ = 0
+        console.log("Restarting from the beginning of the game...")
+        blockSettings.writeNumber("frase__lvl_", 1)
+        frasi__lvl_()
+    }
+}
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (status == IN_MENU) {
         soundeffect.play()
         if (game.ask("Vuoi eliminare i dati?", "Il gioco verrà riavviato!")) {
-            reset__lvl_3_2()
+            reset__lvl_()
             game.reset()
         } else {
             soundeffect.play()
@@ -16,14 +35,36 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
-function inizio__lvl_3_2 () {
+function gioco__lvl_ () {
+    if (blockSettings.readNumber("first_time") == 1) {
+        blockSettings.writeNumber("frase__lvl_", 1)
+        blockSettings.writeNumber("first_time", 0)
+        blockSettings.writeNumber("errori__lvl_", 0)
+    }
+    if (!(blockSettings.exists("frase__lvl_"))) {
+        blockSettings.writeNumber("frase__lvl_", 1)
+    }
+    console.log("Starting from level " + blockSettings.readNumber("frase__lvl_") + "...")
+    game_title.destroy()
+    instructions.destroy()
+    saving.destroy()
+    completa__lvl_ = sprites.create(img`
+        e 
+        `, SpriteKind.Text)
+    completa__lvl_.setPosition(80, 70)
+    parte_selez__lvl_ = textsprite.create("", 0, 1)
+    parte_selez__lvl_.setPosition(80, 75)
+    testo_errori__lvl_ = textsprite.create("Loading...")
+    frasi__lvl_()
+}
+function inizio__lvl_ () {
     music.baDing.play()
     if (!(blockSettings.exists("first_time"))) {
         blockSettings.writeNumber("first_time", 1)
     }
     status = IN_MENU
     scene.setBackgroundImage(main_menu_background)
-    game_title = textsprite.create("Polirematiche", 1, 15)
+    game_title = textsprite.create("Nome del livello", 1, 15)
     game_title.setPosition(80, 50)
     if (blockSettings.readNumber("first_time") == 1) {
         instructions = textsprite.create("A: Inizia", 1, 15)
@@ -38,17 +79,17 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (status == IN_MENU) {
         soundeffect.play()
         status = IN_GAME
-        gioco__lvl_3_2()
+        gioco__lvl_()
     } else if (status == IN_GAME) {
-        if (index == corretto_frase__lvl_3_2) {
+        if (index == corretto_frase__lvl_) {
             music.baDing.play()
-            console.log("Completed level " + blockSettings.readNumber("frase__lvl_3_2") + "!")
-            blockSettings.writeNumber("frase__lvl_3_2", blockSettings.readNumber("frase__lvl_3_2") + 1)
-            frasi__lvl_3_2(blockSettings.readNumber("frase__lvl_3_2"))
+            console.log("Completed level " + blockSettings.readNumber("frase__lvl_") + "!")
+            blockSettings.writeNumber("frase__lvl_", blockSettings.readNumber("frase__lvl_") + 1)
+            frasi__lvl_()
         } else {
-            music.wawawawaa.play()
-            blockSettings.writeNumber("frase__lvl_3_2", 1)
-            frasi__lvl_3_2(blockSettings.readNumber("frase__lvl_3_2"))
+            parte_selez__lvl_.setVelocity(0, 120)
+            LOSING = 1
+            losing__lvl_()
         }
     }
 })
@@ -57,350 +98,102 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (status == IN_GAME) {
         if (!(index == 0)) {
             index += 0 - 1
-            parte_selez__lvl_3_2.setText(contenuto_frase__lvl_3_2[index])
-            parte_selez__lvl_3_2.setPosition(80, 75)
+            parte_selez__lvl_.setText(contenuto_frase__lvl_[index])
+            parte_selez__lvl_.setPosition(80, 75)
         }
     }
 })
-function reset__lvl_3_2 () {
-    blockSettings.clear()
-    console.log("Game data cleared!")
-}
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     soundeffect.play()
     if (status == IN_GAME) {
-        if (!(index == contenuto_frase__lvl_3_2.length - 1)) {
+        if (!(index == contenuto_frase__lvl_.length - 1)) {
             index += 1
-            parte_selez__lvl_3_2.setText(contenuto_frase__lvl_3_2[index])
-            parte_selez__lvl_3_2.setPosition(80, 75)
+            parte_selez__lvl_.setText(contenuto_frase__lvl_[index])
+            parte_selez__lvl_.setPosition(80, 75)
         }
     }
 })
-function gioco__lvl_3_2 () {
-    if (blockSettings.readNumber("first_time") == 1) {
-        frase__lvl_3_2 = 1
-        blockSettings.writeNumber("frase__lvl_3_2", frase__lvl_3_2)
-        blockSettings.writeNumber("first_time", 0)
-    }
-    if (!(blockSettings.exists("frase__lvl_3_2"))) {
-        frase__lvl_3_2 = 1
-        blockSettings.writeNumber("frase__lvl_3_2", frase__lvl_3_2)
-    }
-    frase__lvl_3_2 = blockSettings.readNumber("frase__lvl_3_2")
-    console.log("Starting from level " + blockSettings.readNumber("frase__lvl_3_2") + "...")
-    game_title.destroy()
-    instructions.destroy()
-    saving.destroy()
-    completa__lvl_3_2 = sprites.create(img`
-        e 
-        `, SpriteKind.Text)
-    completa__lvl_3_2.setPosition(80, 70)
-    parte_selez__lvl_3_2 = textsprite.create("", 0, 1)
-    parte_selez__lvl_3_2.setPosition(80, 75)
-    frasi__lvl_3_2(frase__lvl_3_2)
+function reset__lvl_ () {
+    blockSettings.clear()
+    console.log("Game data cleared!")
 }
-function frasi__lvl_3_2 (frase: number) {
+function frasi__lvl_ () {
     index = 0
-    console.log("Loading level " + blockSettings.readNumber("frase__lvl_3_2") + "...")
-    switch (frase) {
-        case 1:
-            // Questa variabile vettore contiene la frase divisa in sintagmi
-            contenuto_frase__lvl_3_2 = [
-                "Per il pranzo di famiglia",
-                "la nonna",
-                "di Maria",
-                "ha tirato il collo",
-                "alla gallina."
-            ]
-            // Questa variabile contiene il sintagma che contiene la polirematica della frase
-            corretto_frase__lvl_3_2 = 3
-            break
-        case 2:
-            contenuto_frase__lvl_3_2 = [
-                "La carta d'identità",
-                "di Luca",
-                "scade",
-                "tra due mesi."
-            ]
-            corretto_frase__lvl_3_2 = 0
-            break
-        case 3:
-            contenuto_frase__lvl_3_2 = [
-                "I miei zii",
-                "hanno trascorso",
-                "la luna di miele",
-                "in America."
-            ]
-            corretto_frase__lvl_3_2 = 2
-            break
-        case 4:
-            contenuto_frase__lvl_3_2 = [
-                "Oggi",
-                "Anna",
-                "deve mangiare",
-                "pasta in bianco."
-            ]
-            corretto_frase__lvl_3_2 = 3
-            break
-        case 5:
-            contenuto_frase__lvl_3_2 = [
-                "Alice",
-                "ha perso la testa",
-                "per il suo nuovo vicino",
-                "di casa."
-            ]
-            corretto_frase__lvl_3_2 = 1
-            break
-        case 6:
-            contenuto_frase__lvl_3_2 = [
-                "Il Presidente",
-                "della Repubblica",
-                "ha convocato",
-                "una conferenza stampa."
-            ]
-            corretto_frase__lvl_3_2 = 3
-            break
-        case 7:
-            contenuto_frase__lvl_3_2 = [
-                "Dopo la festa",
-                "abbiamo messo via",
-                "tutti i giochi."
-            ],
-                corretto_frase__lvl_3_2 = 1
-            break
-        case 8:
-            contenuto_frase__lvl_3_2 = [
-                "La lingua madre",
-                "dei miei cuginetti",
-                "è il tedesco."
-            ],
-                corretto_frase__lvl_3_2 = 0
-            break
-        case 9:
-            contenuto_frase__lvl_3_2 = [
-                "Dopo la caduta",
-                "dalla bicicletta",
-                "sono andato",
-                "velocemente",
-                "al pronto soccorso."
-            ],
-                corretto_frase__lvl_3_2 = 4
-            break
-        case 10:
-            contenuto_frase__lvl_3_2 = [
-                "Domenica",
-                "in montagna",
-                "ho usato",
-                "il mio nuovo",
-                "sacco a pelo",
-                "blu."
-            ],
-                corretto_frase__lvl_3_2 = 4
-            break
-        case 11:
-            contenuto_frase__lvl_3_2 = [
-                "Per un grande brufolo",
-                "sul naso",
-                "mi hanno preso in giro",
-                "tutta la mattina!"
-            ],
-                corretto_frase__lvl_3_2 = 2
-            break
-        case 12:
-            contenuto_frase__lvl_3_2 = [
-                "Quest'anno",
-                "la scuola",
-                "ha assegnato",
-                "ad Alice",
-                "un'importante",
-                "borsa di studio."
-            ],
-                corretto_frase__lvl_3_2 = 5
-            break
-        case 13:
-            contenuto_frase__lvl_3_2 = [
-                "A giugno",
-                "Matilde",
-                "e Anna",
-                "partiranno",
-                "con gli zii",
-                "per una vacanza",
-                "in barca a vela."
-            ]
-            corretto_frase__lvl_3_2 = 6
-            break
-        case 14:
-            contenuto_frase__lvl_3_2 = [
-                "Marta,",
-                "accidentalmente,",
-                "ha buttato via",
-                "le chiavi",
-                "di casa",
-                "con il sacchetto",
-                "della spazzatura."
-            ]
-            corretto_frase__lvl_3_2 = 2
-            break
-        case 15:
-            contenuto_frase__lvl_3_2 = [
-                "Maria",
-                "mi ha mostrato",
-                "la foto",
-                "di una bellissima",
-                "stella marina."
-            ]
-            corretto_frase__lvl_3_2 = 4
-            break
-        case 16:
-            contenuto_frase__lvl_3_2 = [
-                "La squadra",
-                "di Giovanna",
-                "è",
-                "al settimo cielo",
-                "per la vittoria."
-            ]
-            corretto_frase__lvl_3_2 = 3
-            break
-        case 17:
-            contenuto_frase__lvl_3_2 = [
-                "Al grest",
-                "della parrocchia",
-                "la mia squadra",
-                "ha vinto",
-                "la caccia al tesoro",
-                "finale."
-            ]
-            corretto_frase__lvl_3_2 = 4
-            break
-        case 18:
-            contenuto_frase__lvl_3_2 = [
-                "Nel libro",
-                "di Harry Potter",
-                "la Signora Grassa",
-                "decide",
-                "la parola d'ordine",
-                "di Grifondoro."
-            ]
-            corretto_frase__lvl_3_2 = 4
-            break
-        case 19:
-            contenuto_frase__lvl_3_2 = [
-                "A Londra",
-                "la cugina",
-                "di Marta",
-                "ha comprato",
-                "una nuova",
-                "giacca a vento."
-            ]
-            corretto_frase__lvl_3_2 = 5
-            break
-        case 20:
-            contenuto_frase__lvl_3_2 = [
-                "Finalmente",
-                "Giacomo",
-                "ha trovato",
-                "la sua",
-                "anima gemella!"
-            ]
-            corretto_frase__lvl_3_2 = 4
-            break
-        case 21:
-            contenuto_frase__lvl_3_2 = [
-                "Le guardie del corpo",
-                "del Papa",
-                "hanno",
-                "le divise colorate."
-            ]
-            corretto_frase__lvl_3_2 = 0
-            break
-        case 22:
-            contenuto_frase__lvl_3_2 = [
-                "Ho chiamato",
-                "il dottore",
-                "per il mio",
-                "mal di testa."
-            ]
-            corretto_frase__lvl_3_2 = 3
-            break
-        case 23:
-            contenuto_frase__lvl_3_2 = [
-                "Ho avuto",
-                "un colpo al cuore,",
-                "quando ho scoperto",
-                "che era arrivato",
-                "a casa."
-            ]
-            corretto_frase__lvl_3_2 = 1
-            break
-        case 24:
-            contenuto_frase__lvl_3_2 = [
-                "Sai consigliarmi",
-                "una crema corpo",
-                "snellente?"
-            ]
-            corretto_frase__lvl_3_2 = 1
-            break
-        case 25:
-            contenuto_frase__lvl_3_2 = [
-                "Ho viaggiato",
-                "su Italo,",
-                "il treno ad alta velocità",
-                "che collega",
-                "Milano",
-                "a Roma."
-            ]
-            corretto_frase__lvl_3_2 = 2
-            break
-        case 26:
-            contenuto_frase__lvl_3_2 = [
-                "Ho visitato",
-                "l'incantevole camera",
-                "di Elisabetta I",
-                "con il suo meraviglioso",
-                "letto a baldacchino."
-            ]
-            corretto_frase__lvl_3_2 = 4
-            break
-        case 27:
-            contenuto_frase__lvl_3_2 = [
-                "Mi rassegno",
-                "a questo",
-                "stato di cose."
-            ]
-            corretto_frase__lvl_3_2 = 2
-            break
-        case 28:
-            contenuto_frase__lvl_3_2 = [
-                "La giuria",
-                "l'ha ritenuto",
-                "colpevole",
-                "di 17",
-                "capi d'accusa."
-            ]
-            corretto_frase__lvl_3_2 = 4
-            break
-        default:
-            reset__lvl_3_2()
-            game.over(true)
+    // Questo messaggio si trova nella console ed è utile per il debugging del gioco
+    console.log("Loading level " + blockSettings.readNumber("frase__lvl_") + "...")
+    if (blockSettings.readNumber("frase__lvl_") == 1) {
+        // In questa variabile vettore, inserisci la frase separata in sintagmi
+        contenuto_frase__lvl_ = [
+        "Inserisci",
+        "la frase",
+        "di cui individuare",
+        "la polirematica."
+        ]
+        // In questa variabile, inserisci il sintagma corretto
+        corretto_frase__lvl_ = 3
+    } else if (blockSettings.readNumber("frase__lvl_") == 2) {
+        contenuto_frase__lvl_ = [
+        "Inserisci",
+        "un'altra frase",
+        "di cui individuare",
+        "la polirematica."
+        ]
+        corretto_frase__lvl_ = 3
+    } else if (blockSettings.readNumber("frase__lvl_") == 3) {
+        contenuto_frase__lvl_ = [
+        "Inserisci",
+        "un'altra frase",
+        "di cui individuare",
+        "la polirematica."
+        ]
+        corretto_frase__lvl_ = 3
+    } else if (blockSettings.readNumber("frase__lvl_") == 4) {
+        contenuto_frase__lvl_ = [
+        "Inserisci",
+        "un'altra frase",
+        "di cui individuare",
+        "la polirematica."
+        ]
+        corretto_frase__lvl_ = 3
+    } else if (blockSettings.readNumber("frase__lvl_") == 5) {
+        contenuto_frase__lvl_ = [
+        "Inserisci",
+        "un'altra frase",
+        "di cui individuare",
+        "la polirematica."
+        ]
+        corretto_frase__lvl_ = 3
+    } else {
+        reset__lvl_()
+        game.over(true)
     }
-parte_selez__lvl_3_2.setText(contenuto_frase__lvl_3_2[index])
-    parte_selez__lvl_3_2.setPosition(80, 75)
+    if (errori__lvl_ == 1) {
+        testo_errori__lvl_.setText("1 errore")
+    } else {
+        testo_errori__lvl_.setText("" + errori__lvl_ + " errori")
+    }
+    testo_errori__lvl_.setPosition(30, 10)
+    parte_selez__lvl_.setText(contenuto_frase__lvl_[index])
+    parte_selez__lvl_.setPosition(80, 75)
 }
 let background_index = 0
-let completa__lvl_3_2: Sprite = null
-let frase__lvl_3_2 = 0
-let parte_selez__lvl_3_2: TextSprite = null
+let corretto_frase__lvl_ = 0
 let index = 0
+let completa__lvl_: Sprite = null
 let saving: TextSprite = null
 let instructions: TextSprite = null
 let game_title: TextSprite = null
 let status = 0
+let testo_errori__lvl_: TextSprite = null
+let errori__lvl_ = 0
+let parte_selez__lvl_: TextSprite = null
+let LOSING = 0
 let soundeffect: SoundBuffer = null
 let IN_GAME = 0
 let IN_MENU = 0
 let main_menu_background: Image = null
-let corretto_frase__lvl_3_2 = 0
-let contenuto_frase__lvl_3_2: string[]
+let contenuto_frase__lvl_: string[] = []
+contenuto_frase__lvl_ = []
 main_menu_background = img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999991119999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -526,7 +319,7 @@ main_menu_background = img`
 IN_MENU = 0
 IN_GAME = 1
 soundeffect = soundEffects.createSound(soundEffects.waveNumber(WaveType.Sine), 200, 440, 440)
-inizio__lvl_3_2()
+inizio__lvl_()
 let videoFrames = [
 img`
     fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -1018,8 +811,14 @@ img`
     `
 ]
 forever(function () {
+    if (LOSING == 1) {
+        transformSprites.changeRotation(parte_selez__lvl_, 5)
+        pause(50)
+    }
+})
+forever(function () {
     if (status == IN_GAME) {
-        completa__lvl_3_2.sayText(contenuto_frase__lvl_3_2.join(" "))
+        completa__lvl_.sayText(contenuto_frase__lvl_.join(" "))
         if (background_index == videoFrames.length - 1) {
             background_index = 0
         } else {
