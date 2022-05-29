@@ -54,6 +54,12 @@ function gioco__lvl_ () {
     parte_selez__lvl_ = textsprite.create("", 0, 1)
     parte_selez__lvl_.setPosition(80, 75)
     testo_errori__lvl_ = textsprite.create("Loading...")
+    tipi_frase__lvl_ = [
+    "Concessiva",
+    "Mezzo",
+    "Causa",
+    "Fine"
+    ]
     frasi__lvl_()
 }
 function inizio__lvl_ () {
@@ -94,20 +100,20 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     soundeffect.play()
-    if (status == IN_GAME) {
+    if (status == IN_GAME && LOSING == 0) {
         if (!(index == 0)) {
             index += 0 - 1
-            parte_selez__lvl_.setText(contenuto_frase__lvl_[index])
+            parte_selez__lvl_.setText(tipi_frase__lvl_[index])
             parte_selez__lvl_.setPosition(80, 75)
         }
     }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     soundeffect.play()
-    if (status == IN_GAME) {
-        if (!(index == contenuto_frase__lvl_.length - 1)) {
+    if (status == IN_GAME && LOSING == 0) {
+        if (!(index == tipi_frase__lvl_.length - 1)) {
             index += 1
-            parte_selez__lvl_.setText(contenuto_frase__lvl_[index])
+            parte_selez__lvl_.setText(tipi_frase__lvl_[index])
             parte_selez__lvl_.setPosition(80, 75)
         }
     }
@@ -121,46 +127,18 @@ function frasi__lvl_ () {
     // Questo messaggio si trova nella console ed è utile per il debugging del gioco
     console.log("Loading level " + blockSettings.readNumber("frase__lvl_") + "...")
     if (blockSettings.readNumber("frase__lvl_") == 1) {
-        // In questa variabile vettore, inserisci la frase separata in sintagmi
-        contenuto_frase__lvl_ = [
-        "Inserisci",
-        "la frase",
-        "di cui individuare",
-        "la polirematica."
-        ]
-        // In questa variabile, inserisci il sintagma corretto
-        corretto_frase__lvl_ = 3
+        // In questa variabile, inserisci la frase
+        frase_completa__lvl_ = "Questa è una concessiva"
+        // In questa variabile, inserisci tipo di complemento corretto (esempio: Concessiva = 0)
+        corretto_frase__lvl_ = 0
     } else if (blockSettings.readNumber("frase__lvl_") == 2) {
-        contenuto_frase__lvl_ = [
-        "Inserisci",
-        "un'altra frase",
-        "di cui individuare",
-        "la polirematica."
-        ]
-        corretto_frase__lvl_ = 3
+        frase_completa__lvl_ = "Questo è un mezzo"
+        corretto_frase__lvl_ = 1
     } else if (blockSettings.readNumber("frase__lvl_") == 3) {
-        contenuto_frase__lvl_ = [
-        "Inserisci",
-        "un'altra frase",
-        "di cui individuare",
-        "la polirematica."
-        ]
-        corretto_frase__lvl_ = 3
+        frase_completa__lvl_ = "Questa è una causa"
+        corretto_frase__lvl_ = 2
     } else if (blockSettings.readNumber("frase__lvl_") == 4) {
-        contenuto_frase__lvl_ = [
-        "Inserisci",
-        "un'altra frase",
-        "di cui individuare",
-        "la polirematica."
-        ]
-        corretto_frase__lvl_ = 3
-    } else if (blockSettings.readNumber("frase__lvl_") == 5) {
-        contenuto_frase__lvl_ = [
-        "Inserisci",
-        "un'altra frase",
-        "di cui individuare",
-        "la polirematica."
-        ]
+        frase_completa__lvl_ = "Questa è una fine"
         corretto_frase__lvl_ = 3
     } else {
         reset__lvl_()
@@ -172,12 +150,14 @@ function frasi__lvl_ () {
         testo_errori__lvl_.setText("" + errori__lvl_ + " errori")
     }
     testo_errori__lvl_.setPosition(30, 10)
-    parte_selez__lvl_.setText(contenuto_frase__lvl_[index])
+    parte_selez__lvl_.setText(tipi_frase__lvl_[index])
     parte_selez__lvl_.setPosition(80, 75)
 }
 let background_index = 0
 let corretto_frase__lvl_ = 0
 let index = 0
+let frase_completa__lvl_: string = ""
+let tipi_frase__lvl_: string[] = []
 let completa__lvl_: Sprite = null
 let saving: TextSprite = null
 let instructions: TextSprite = null
@@ -191,8 +171,6 @@ let soundeffect: SoundBuffer = null
 let IN_GAME = 0
 let IN_MENU = 0
 let main_menu_background: Image = null
-let contenuto_frase__lvl_: string[] = []
-contenuto_frase__lvl_ = []
 main_menu_background = img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999991119999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -817,7 +795,7 @@ forever(function () {
 })
 forever(function () {
     if (status == IN_GAME) {
-        completa__lvl_.sayText(contenuto_frase__lvl_.join(" "))
+        completa__lvl_.sayText(frase_completa__lvl_)
         if (background_index == videoFrames.length - 1) {
             background_index = 0
         } else {
