@@ -10,11 +10,10 @@ function losing__lvl_ () {
         blockSettings.writeNumber("frase__lvl_", blockSettings.readNumber("frase__lvl_") + 1)
         frasi__lvl_()
     } else {
-        music.wawawawaa.play()
-        errori__lvl_ = 0
-        console.log("Restarting from the beginning of the game...")
-        blockSettings.writeNumber("frase__lvl_", 1)
-        frasi__lvl_()
+        errori__lvl_ += 1
+        testo_errori__lvl_.setText("" + errori__lvl_ + " errori")
+        reset__lvl_()
+        game.over(false)
     }
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -179,12 +178,12 @@ function frasi__lvl_ () {
 let background_index = 0
 let corretto_frase__lvl_ = 0
 let index = 0
-let testo_errori__lvl_: TextSprite = null
 let completa__lvl_: Sprite = null
 let saving: TextSprite = null
 let instructions: TextSprite = null
 let game_title: TextSprite = null
 let status = 0
+let testo_errori__lvl_: TextSprite = null
 let errori__lvl_ = 0
 let parte_selez__lvl_: TextSprite = null
 let LOSING = 0
