@@ -3,7 +3,7 @@ function losing__lvl_ () {
     LOSING = 0
     parte_selez__lvl_.setVelocity(0, 0)
     transformSprites.rotateSprite(parte_selez__lvl_, 0)
-    if (errori__lvl_ != 4) {
+    if (errori__lvl_ != 3) {
         music.smallCrash.play()
         errori__lvl_ += 1
         console.log("Skipped level " + blockSettings.readNumber("frase__lvl_") + "!")
@@ -179,12 +179,12 @@ function frasi__lvl_ () {
 let background_index = 0
 let corretto_frase__lvl_ = 0
 let index = 0
+let testo_errori__lvl_: TextSprite = null
 let completa__lvl_: Sprite = null
 let saving: TextSprite = null
 let instructions: TextSprite = null
 let game_title: TextSprite = null
 let status = 0
-let testo_errori__lvl_: TextSprite = null
 let errori__lvl_ = 0
 let parte_selez__lvl_: TextSprite = null
 let LOSING = 0
